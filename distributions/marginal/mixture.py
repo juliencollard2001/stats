@@ -18,11 +18,11 @@ class Mixture(Marginal):
 
             key = jax.random.key(6837)
 
-            for marginal in self.marginals:
-                params = marginal.get_params()
+            for dist in self.distributions:
+                params = dist.get_params()
                 key, subkey = jax.random.split(key)
                 perturb = jax.random.exponential(subkey, shape=params.shape) / 10
-                marginal.set_params(params + perturb)
+                dist.set_params(params + perturb)
         
         def fit(self, data: Array, weights: Array | None = None) -> None:
 
