@@ -58,10 +58,11 @@ class Histogram(Copula):
         kernel_size = int(2 * 3.0 * sigma + 1)
         x = jnp.arange(-kernel_size // 2 + 1., kernel_size // 2 + 1.)
         x = x / sigma
-        kernel = jnp.exp(-0.5 * x**2)
+        kernel_base = jnp.exp(-0.5 * x**2)
+        kernel = jnp.copy(kernel_base)
         # Make it d-dimensional
         for i in range(1, self.d):
-            kernel = jnp.outer(kernel, kernel)
+            kernel = jnp.outer(kernel, kernel_base)
         kernel = kernel / jnp.sum(kernel)
 
         # Convolve the input array with the Gaussian kernel
