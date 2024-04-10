@@ -15,7 +15,7 @@ class Exponential(Marginal):
         self.rate = jnp.sum(data * weights) / jnp.sum(weights)
 
     def get_params(self) -> Array:
-        return jnp.array(self.rate)
+        return jnp.array([self.rate])
     
     def set_params(self, params : Array) -> None:
         self.rate = params[0]
