@@ -26,10 +26,16 @@ class Gaussian(Copula):
         self.cov = jnp.cov(back_transf_data, rowvar=False, aweights=weights)
 
     def one_x_pdf(self, x: Array) -> Array:
-        return norm.pdf(self.gaussian_univariate_inverse_cdf(x), mean=jnp.zeros(self.d), cov=self.cov)
+        back_transf_x = self.gaussian_univariate_inverse_cdf(x)
+        max_value = jnp.nanmax(back_transf_x[jnp.isfinite(back_transf_x)])
+        back_transf_x = jnp.where(jnp.isinf(back_transf_x), max_value, back_transf_x)
+        return norm.pdf(back_transf_x, mean=jnp.zeros(self.d), cov=self.cov)
     
     def one_x_logpdf(self, x: Array) -> Array:
-        return norm.logpdf(self.gaussian_univariate_inverse_cdf(x), mean=jnp.zeros(self.d), cov=self.cov)
+        back_transf_x = self.gaussian_univariate_inverse_cdf(x)
+        max_value = jnp.nanmax(back_transf_x[jnp.isfinite(back_transf_x)])
+        back_transf_x = jnp.where(jnp.isinf(back_transf_x), max_value, back_transf_x)
+        return norm.logpdf(back_transf_x, mean=jnp.zeros(self.d), cov=self.cov)
     
     def pdf(self, x: Array) -> Array:
         f = jit(vmap(self.one_x_pdf))
