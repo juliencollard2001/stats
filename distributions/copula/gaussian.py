@@ -21,6 +21,8 @@ class Gaussian(Copula):
         else:
             weights = weights / jnp.sum(weights)
         back_transf_data = self.gaussian_univariate_inverse_cdf(data)
+        max_value = jnp.nanmax(back_transf_data[jnp.isfinite(back_transf_data)])
+        back_transf_data = jnp.where(jnp.isinf(back_transf_data), max_value, back_transf_data)
         self.cov = jnp.cov(back_transf_data, rowvar=False, aweights=weights)
 
     def one_x_pdf(self, x: Array) -> Array:
