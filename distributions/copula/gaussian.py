@@ -24,10 +24,10 @@ class Gaussian(Copula):
         self.cov = jnp.cov(back_transf_data, rowvar=False, aweights=weights)
 
     def one_x_pdf(self, x: Array) -> Array:
-        return norm.pdf(erfinv(x), loc=jnp.zeros(self.d), scale=self.cov)
+        return norm.pdf(erfinv(x), mean=jnp.zeros(self.d), cov=self.cov)
     
     def one_x_logpdf(self, x: Array) -> Array:
-        return norm.logpdf(erfinv(x), loc=jnp.zeros(self.d), scale=self.cov)
+        return norm.logpdf(erfinv(x), mean=jnp.zeros(self.d), cov=self.cov)
     
     def pdf(self, x: Array) -> Array:
         f = jit(vmap(self.one_x_pdf))
