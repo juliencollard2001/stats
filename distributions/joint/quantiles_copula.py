@@ -13,7 +13,4 @@ class QuantilesCopula(CopulaBased):
             marginals = [Quantile() for _ in range(d)]
         else:
             marginals = [Quantile(Quantile.beta_quantiles()) for _ in range(d)]
-        if nb_components is None:
-            nb_components = 5*d
-        copula = GaussianMixture(d, nb_components)
         super().__init__(copula, marginals)
