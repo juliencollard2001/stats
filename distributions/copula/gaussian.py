@@ -4,7 +4,7 @@ from jax import Array
 from jax import grad, jit, vmap
 import numpy.random as npr
 from jax.scipy.special import erfinv, erfc
-from jax.scipy.stats import norm
+from jax.scipy.stats import multivariate_normal as norm
 
 from .base import Copula
 
