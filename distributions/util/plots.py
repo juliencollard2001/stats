@@ -10,13 +10,13 @@ def plot_marginal(marginal : Marginal, data : Array) -> None:
     X = data
     x = jnp.linspace(jnp.min(X), jnp.max(X), 1000)
     y = marginal.pdf(x)
-    axs[0,0].plot(x, y)
-    axs[0,0].hist(X, bins=50, density=True, alpha=0.5)
-    axs[0,0].set_title(f'Marginal PDF')
+    axs[0].plot(x, y)
+    axs[0].hist(X, bins=50, density=True, alpha=0.5)
+    axs[0].set_title(f'Marginal PDF')
     y = marginal.cdf(x)
-    axs[0,1].plot(x, y)
-    axs[0,1].hist(X, bins=50, density=True, alpha=0.5, cumulative=True)
-    axs[0,1].set_title(f'Marginal CDF')
+    axs[1].plot(x, y)
+    axs[1].hist(X, bins=50, density=True, alpha=0.5, cumulative=True)
+    axs[1].set_title(f'Marginal CDF')
     plt.show()
 
 def plot_marginals(model : CopulaBased, data : Array) -> None:
