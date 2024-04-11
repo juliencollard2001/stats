@@ -22,12 +22,20 @@ class Gaussian(Copula):
             weights = weights / jnp.sum(weights)
         back_transf_data = erfinv(data)
         self.cov = jnp.cov(back_transf_data, rowvar=False, aweights=weights)
-    
-    def pdf(self, x: Array) -> Array:
+
+    def one_x_pdf(self, x: Array) -> Array:
         return norm.pdf(erfinv(x), loc=jnp.zeros(self.d), scale=self.cov)
     
-    def logpdf(self, x: Array) -> Array:
+    def one_x_logpdf(self, x: Array) -> Array:
         return norm.logpdf(erfinv(x), loc=jnp.zeros(self.d), scale=self.cov)
+    
+    def pdf(self, x: Array) -> Array:
+        f = jit(vmap(self.one_x_pdf))
+        return f(x)
+    
+    def logpdf(self, x: Array) -> Array:
+        f = jit(vmap(self.one_x_logpdf))
+        return f(x)
     
     def get_params(self) -> Array:
         return self.cov.flatten()
